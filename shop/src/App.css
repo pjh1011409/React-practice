@@ -1,0 +1,22 @@
+.App {
+  text-align: center;
+}
+
+
+.jumbotron{
+  margin-top: 70px;
+  margin-bottom: 70px;
+  background-color: #eee;
+  background-image: url('./background.jpeg');
+  background-size: cover;
+  color: white;
+}
+
+.jumbotron h1{
+  padding-top: 30px;
+}
+
+.jumbotron p{
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
