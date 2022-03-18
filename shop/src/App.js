@@ -3,19 +3,32 @@ import {Navbar,Container, Nav, NavDropdown, Button } from 'react-bootstrap';
 import React, {useState} from 'react';
 import Data from './data';
 
+import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
+
 function App() {
 
-  let [shoes,shoes변경] = useState(Data);
+      let [shoes,shoes변경] = useState(Data);
 
-  return (
-    <div className="App">
-       
-      <Navigation></Navigation>
-      <Post></Post>
-      <Shoes shoes={shoes}></Shoes>
-    </div>
-  );
-}
+      return (
+        <div className="App">
+          
+          <Navigation></Navigation>
+          
+
+        <BrowserRouter>
+          {/* 메인페이지 */}
+          <Route exact path="/">
+              <Post></Post>
+              <Shoes shoes={shoes}></Shoes>
+          </Route>
+          {/* 상세페이지 */}
+          <Route path="/detail">
+              <Detail></Detail>
+          </Route>
+        </BrowserRouter>
+        </div>
+      );
+    }
         function Navigation(){
           return(
             <Navbar bg="light" expand="lg">
@@ -76,6 +89,23 @@ function App() {
               </div>
             </div>
 
+          )
+        }
+        function Detail(){
+          return(
+              <div className="container">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" />
+                      </div>
+                      <div className="col-md-6 mt-4">
+                        <h4 className="pt-5">상품명</h4>
+                        <p>상품설명</p>
+                        <p>120000원</p>
+                        <button className="btn btn-danger">주문하기</button> 
+                      </div>
+                    </div>
+              </div> 
           )
         }
 export default App;
