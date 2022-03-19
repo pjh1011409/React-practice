@@ -1,0 +1,51 @@
+@Import './reset.scss';
+
+
+
+@mixin 함수(){
+    background-color: #eeeeee;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+
+    p{
+        margin-bottom: 0;
+    }
+}
+.my-alert{
+    @include 함수()
+}
+
+
+.my alert2 {
+    @extend .my-alert;
+}
+
+
+
+
+// $메인컬러 : black;
+
+// .red{
+//     color: $메인컬러;
+// }
+
+
+// div.container h4{
+//     color: blue;
+// }
+// div.container p{
+//     color: red;
+// }
+
+// div.container {
+//     h4{
+//         color:blue;
+//     }
+//     p{
+//         color: green;
+//     }
+
+// }
