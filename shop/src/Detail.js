@@ -3,6 +3,8 @@ import { useHistory, useParams} from 'react-router-dom';
 import styled from 'styled-components';
 import './Detail.scss';
 import axios from 'axios';
+import {Nav} from 'react-bootstrap'
+import {CSSTransition} from 'react-transition-group';
 
 let 박스 = styled.div`
     padding: 20px;
@@ -19,16 +21,14 @@ function Detail(props){
         return x.id == id
       });
     let [notice,notice변경] = useState(true);
+
     useEffect(() => {
       let timer =  setTimeout(()=>{notice변경(false)}, 2000);
       return ()=>{ clearTimeout(timer) }
     },[]);
     
-    function 재고빼기(){
-      let 재고량 = [...props.재고];
-      재고량 = 재고량[0] -1;
-      props.재고변경(재고량);
-    }
+    let [탭, 탭변경] = useState(0);
+    let [효과,효과변경] = useState(false);
     return(
         <div className="container">
                 <박스 >
@@ -54,17 +54,41 @@ function Detail(props){
                    
                       <Info 재고={props.재고} ></Info>
                     
-                  <button className="btn btn-danger" onClick= {재고빼기
-                  }>주문하기</button>
+                  <button className="btn btn-danger" onClick={()=>{props.재고변경([9,11,12])}}>주문하기</button>
                   &nbsp;
                   <button className="btn btn-danger" onClick={() =>{
                       history.push('/')
                   }}>뒤로가기</button> 
-                  
                 </div>
               </div>
+
+              <Nav className="mt-5" variant="tabs" defaultActiveKey="link-0">
+                  <Nav.Item>
+                    <Nav.Link eventKey="link-0" onClick={()=>{탭변경(0); 효과변경(false)}} >Active</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="link-1" onClick={()=>{탭변경(1); 효과변경(false)}}>Option 2</Nav.Link>
+                  </Nav.Item>
+              </Nav>
+
+               <CSSTransition in={효과} classNames="wow" timeout={500}>
+               <TabContent 탭={탭} 효과변경={효과변경}></TabContent>
+               </CSSTransition>
         </div> 
     )
+  }
+  function TabContent(props){
+
+    useEffect(()=>{
+      props.효과변경(true);
+    })
+
+    if(props.탭 === 0) {
+        return <div>0번째</div>
+     }
+     else if(props.탭 === 1) {
+      return <div>1번째</div>
+     }
   }
 
   function Info(props){

@@ -1,21 +1,22 @@
 import './App.css';
 import {Navbar,Container, Nav, NavDropdown, Button } from 'react-bootstrap';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Data from './data';
 import Detail from './Detail'
 import axios from 'axios';
 import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
+
+let 재고context = React.createContext();
 
 function App() {
 
       let [shoes,shoes변경] = useState(Data);
       let [재고, 재고변경] = useState([10,11,12]);
 
-
       return (
         <div className="App">
           
-          
+
           <BrowserRouter> 
 
             <Navigation></Navigation>
@@ -23,7 +24,9 @@ function App() {
             {/* 메인페이지 */}
             <Route exact path="/">
                 <Post></Post>
-                <Shoes shoes={shoes} shoes변경 = {shoes변경}></Shoes>    
+                <재고context.Provider value={재고}>
+                <Shoes shoes={shoes} shoes변경 = {shoes변경}></Shoes> 
+                </재고context.Provider>   
             </Route>
 
             {/* 상세페이지 */}
@@ -93,28 +96,15 @@ function App() {
                       <h4>{props.shoes[i].title}</h4>
                       <p>{props.shoes[i].content}</p>
                       <p>{props.shoes[i].price}</p>
+                      <Test i = {i}></Test>
                       </div>
                     )
                   })
                 }
-                
               </div>
-                        {
-                          로딩중 === true
-                          ? <div>로딩중입니다.</div>
-                          : null
-                        }
-                        {
-                          로딩성공 === true
-                          ? <div>로딩성공입니다.</div>
-                          :  null                        
-                        }
-                        {
-                          로딩실패 === true
-                          ? <div>로딩실패입니다.</div>   
-                          : null
-                        }
-                           
+                        { 로딩중 === true ? <div>로딩중입니다.</div>: null }
+                        { 로딩성공 === true ? <div>로딩성공입니다.</div> : null }                     
+                        { 로딩실패 === true ? <div>로딩실패입니다.</div>  : null }   
                     <button className='btn btn-primary' onClick ={()=> {
                         로딩중변경(true)                   
                       axios.get('https://codingapple1.github.io/shop/data2.json')
@@ -134,6 +124,13 @@ function App() {
 
           )
         }
-       
+        function Test(props){
+          let 재고 = useContext(재고context);
+
+          return(
+            <p>{재고[props.i]}</p>
+
+          )
+        }
         
 export default App;
