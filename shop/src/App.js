@@ -1,14 +1,18 @@
 import './App.css';
 import {Navbar,Container, Nav, NavDropdown, Button } from 'react-bootstrap';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Data from './data';
 import Detail from './Detail'
-
+import axios from 'axios';
 import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
 
 function App() {
 
       let [shoes,shoes변경] = useState(Data);
+      let [로딩중,로딩중변경] = useState(false);
+      let [로딩성공,로딩성공변경] = useState(false);
+      let [로딩실패,로딩실패변경] = useState(false);
+      let [열고닫기,열고닫기변경] = useState(false);
 
       return (
         <div className="App">
@@ -17,11 +21,44 @@ function App() {
           <BrowserRouter> 
 
             <Navigation></Navigation>
-            {/* 메인페이지 */}
             <Switch>
+            {/* 메인페이지 */}
             <Route exact path="/">
                 <Post></Post>
-                <Shoes shoes={shoes}></Shoes>
+                <Shoes shoes={shoes}></Shoes>   
+                        {
+                          로딩중 === true
+                          ? <div>로딩중입니다.</div>
+                          : null
+                        }
+                        {
+                          로딩성공 === true
+                          ? <div>로딩성공입니다.</div>
+                          :  null                        
+                        }
+                        {
+                          로딩실패 === true
+                          ? <div>로딩실패입니다.</div>   
+                          : null
+                        }
+                           
+                    <button className='btn btn-primary' onClick ={()=> {
+                     
+                        로딩중변경(true)                   
+                      axios.get('https://codingapple1.github.io/shop/data2.json')
+                      .then((result)=>{
+                          로딩중변경(false);
+                          로딩성공변경(true);
+                          열고닫기변경(true);
+                        shoes변경([...shoes, ...result.data ]);
+                      })
+                      .catch(()=>{ 
+                        로딩중변경(false)
+                        로딩실패변경(true)
+                      })
+                    }}>더보기</button>
+                      
+            
             </Route>
 
             {/* 상세페이지 */}
@@ -43,8 +80,8 @@ function App() {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                  <Nav.Link> <Link to="/">Home</Link> </Nav.Link>
-                  <Nav.Link> <Link to="/detail">Detail</Link> </Nav.Link>
+                  <Nav.Link as = {Link} to="/">Home </Nav.Link>
+                  <Nav.Link as= {Link} to="/detail">Detail </Nav.Link>
                   <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
@@ -86,16 +123,17 @@ function App() {
                       <h4>{props.shoes[i].title}</h4>
                       <p>{props.shoes[i].content}</p>
                       <p>{props.shoes[i].price}</p>
-          
                       </div>
                     )
                   })
                 }
                 
               </div>
+            
             </div>
 
           )
         }
+       
         
 export default App;
