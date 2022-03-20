@@ -19,20 +19,16 @@ function Detail(props){
         return x.id == id
       });
     let [notice,notice변경] = useState(true);
-
-  
     useEffect(() => {
       let timer =  setTimeout(()=>{notice변경(false)}, 2000);
-
       return ()=>{ clearTimeout(timer) }
-
-
-
     },[]);
     
-
-    
-
+    function 재고빼기(){
+      let 재고량 = [...props.재고];
+      재고량 = 재고량[0] -1;
+      props.재고변경(재고량);
+    }
     return(
         <div className="container">
                 <박스 >
@@ -54,7 +50,13 @@ function Detail(props){
                   <h4 className="pt-5">{shoesId.title}</h4>
                   <p>{shoesId.content}</p>
                   <p>{shoesId.price}</p>
-                  <button className="btn btn-danger">주문하기</button>
+                  
+                   
+                      <Info 재고={props.재고} ></Info>
+                    
+                  <button className="btn btn-danger" onClick= {재고빼기
+                  }>주문하기</button>
+                  &nbsp;
                   <button className="btn btn-danger" onClick={() =>{
                       history.push('/')
                   }}>뒤로가기</button> 
@@ -62,6 +64,12 @@ function Detail(props){
                 </div>
               </div>
         </div> 
+    )
+  }
+
+  function Info(props){
+    return(
+        <p>재고: {props.재고[0]}</p>
     )
   }
 
