@@ -9,10 +9,8 @@ import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
 function App() {
 
       let [shoes,shoes변경] = useState(Data);
-      let [로딩중,로딩중변경] = useState(false);
-      let [로딩성공,로딩성공변경] = useState(false);
-      let [로딩실패,로딩실패변경] = useState(false);
-      let [열고닫기,열고닫기변경] = useState(false);
+      let [재고, 재고변경] = useState([10,11,12]);
+
 
       return (
         <div className="App">
@@ -25,45 +23,12 @@ function App() {
             {/* 메인페이지 */}
             <Route exact path="/">
                 <Post></Post>
-                <Shoes shoes={shoes}></Shoes>   
-                        {
-                          로딩중 === true
-                          ? <div>로딩중입니다.</div>
-                          : null
-                        }
-                        {
-                          로딩성공 === true
-                          ? <div>로딩성공입니다.</div>
-                          :  null                        
-                        }
-                        {
-                          로딩실패 === true
-                          ? <div>로딩실패입니다.</div>   
-                          : null
-                        }
-                           
-                    <button className='btn btn-primary' onClick ={()=> {
-                     
-                        로딩중변경(true)                   
-                      axios.get('https://codingapple1.github.io/shop/data2.json')
-                      .then((result)=>{
-                          로딩중변경(false);
-                          로딩성공변경(true);
-                          열고닫기변경(true);
-                        shoes변경([...shoes, ...result.data ]);
-                      })
-                      .catch(()=>{ 
-                        로딩중변경(false)
-                        로딩실패변경(true)
-                      })
-                    }}>더보기</button>
-                      
-            
+                <Shoes shoes={shoes} shoes변경 = {shoes변경}></Shoes>    
             </Route>
 
             {/* 상세페이지 */}
             <Route path="/detail/:id">
-                <Detail shoes={shoes}></Detail>
+                <Detail shoes={shoes} 재고={재고} 재고변경={재고변경}></Detail>
             </Route>
 
            
@@ -112,6 +77,11 @@ function App() {
           )
         }
         function Shoes(props){
+
+          let [로딩중,로딩중변경] = useState(false);
+          let [로딩성공,로딩성공변경] = useState(false);
+          let [로딩실패,로딩실패변경] = useState(false);
+          
           return( 
               <div className='container'>
               <div className='row'>
@@ -129,6 +99,36 @@ function App() {
                 }
                 
               </div>
+                        {
+                          로딩중 === true
+                          ? <div>로딩중입니다.</div>
+                          : null
+                        }
+                        {
+                          로딩성공 === true
+                          ? <div>로딩성공입니다.</div>
+                          :  null                        
+                        }
+                        {
+                          로딩실패 === true
+                          ? <div>로딩실패입니다.</div>   
+                          : null
+                        }
+                           
+                    <button className='btn btn-primary' onClick ={()=> {
+                        로딩중변경(true)                   
+                      axios.get('https://codingapple1.github.io/shop/data2.json')
+                      .then((result)=>{
+                          로딩중변경(false);
+                          로딩성공변경(true);
+                        props.shoes변경([...props.shoes, ...result.data ]);
+                      })
+                      .catch(()=>{ 
+                        로딩중변경(false)
+                        로딩실패변경(true)
+                      })
+                    }}>더보기</button>
+                      
             
             </div>
 
