@@ -5,6 +5,7 @@ import './Detail.scss';
 import axios from 'axios';
 import {Nav} from 'react-bootstrap'
 import {CSSTransition} from 'react-transition-group';
+import { connect } from "react-redux";
 
 let 박스 = styled.div`
     padding: 20px;
@@ -29,6 +30,7 @@ function Detail(props){
     
     let [탭, 탭변경] = useState(0);
     let [효과,효과변경] = useState(false);
+    let [수량,수량변경] = useState(0);
     return(
         <div className="container">
                 <박스 >
@@ -54,7 +56,11 @@ function Detail(props){
                    
                       <Info 재고={props.재고} ></Info>
                     
-                  <button className="btn btn-danger" onClick={()=>{props.재고변경([9,11,12])}}>주문하기</button>
+                  <button className="btn btn-danger" onClick={()=>{
+                    props.재고변경([9,11,12])
+                    props.dispatch({type: '항목추가', payload: {id: 1, name: shoesId.title, quan: 1}});
+                    history.push('/cart');
+                    }}>주문하기</button>
                   &nbsp;
                   <button className="btn btn-danger" onClick={() =>{
                       history.push('/')
@@ -97,4 +103,13 @@ function Detail(props){
     )
   }
 
-  export default Detail;
+
+  
+function mapStateToProps(state) {
+  return {
+    state: state.reducer,
+    alert: state.reducer2
+  };
+}
+
+export default connect(mapStateToProps)(Detail);
