@@ -30,7 +30,18 @@ function Detail(props){
     
     let [탭, 탭변경] = useState(0);
     let [효과,효과변경] = useState(false);
-    let [수량,수량변경] = useState(0);
+
+    function 수량감소(){
+      let copy = [...props.재고]; //재고량이 담긴 배열이 깊은 복사
+      if(copy[shoesId.id] === 0){ // 만약 재고가 0이면 0에서 개수는 끝나고 안내메시지 출력
+        copy[shoesId.id] = 0;
+        props.dispatch({type:'항목추가불가'});
+      }
+      else{ // 아니라면 1씩 감소 후 그 값이 출력
+        copy[shoesId.id] = copy[shoesId.id] - 1; //클릭하면 몇번째 재고량이 1씩 감소
+        props.재고변경(copy);
+      }
+    }
     return(
         <div className="container">
                 <박스 >
@@ -54,12 +65,13 @@ function Detail(props){
                   <p>{shoesId.price}</p>
                   
                    
-                      <Info 재고={props.재고} ></Info>
+                      <Info 재고={props.재고} shoesId = {shoesId} ></Info>
                     
                   <button className="btn btn-danger" onClick={()=>{
-                    props.재고변경([9,11,12])
-                    props.dispatch({type: '항목추가', payload: {id: 1, name: shoesId.title, quan: 1}});
-                    history.push('/cart');
+                    
+                    수량감소(); 
+                    props.dispatch({type: '항목추가', payload: {id: shoesId.id, name: shoesId.title, quan: 1, price: shoesId.price}});
+                    history.push('/Cart');
                     }}>주문하기</button>
                   &nbsp;
                   <button className="btn btn-danger" onClick={() =>{
@@ -99,7 +111,17 @@ function Detail(props){
 
   function Info(props){
     return(
-        <p>재고: {props.재고[0]}</p>
+      <div>
+        <p>재고: {props.재고[props.shoesId.id]}</p>
+      {/* {
+        props.재고.map((i)=>{
+          return(
+            <p> 재고: {props.재고[i]}</p>
+          )
+        })
+
+      } */}
+      </div>
     )
   }
 
