@@ -5,13 +5,13 @@ import Data from "./data";
 import Detail from "./Detail";
 import Cart from './Cart'
 import axios from "axios";
-import {  Link, Route, Switch } from "react-router-dom";
+import {  Link, Route, Switch, useHistory, useParams } from "react-router-dom";
 
 let 재고context = React.createContext();
 
 function App() {
   let [shoes, shoes변경] = useState(Data);
-  let [재고, 재고변경] = useState([10, 11, 12]);
+  let [재고, 재고변경] = useState([2, 3, 1]);
 
   return (
     <div className="App">
@@ -52,17 +52,9 @@ function Navigation() {
             <Nav.Link as={Link} to="/detail">
               Detail{" "}
             </Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
+            <Nav.Link as={Link} to="/cart">
+              Cart{" "}
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -89,13 +81,14 @@ function Shoes(props) {
   let [로딩중, 로딩중변경] = useState(false);
   let [로딩성공, 로딩성공변경] = useState(false);
   let [로딩실패, 로딩실패변경] = useState(false);
+  let history = useHistory();
 
   return (
     <div className="container">
       <div className="row">
         {props.shoes.map((a, i) => {
           return (
-            <div className="col-md-4" key={i}>
+            <div className="col-md-4" key={i} onClick={()=>{history.push('/detail/'+ props.shoes[i].id)}} >
               <img
                 src={
                   "https://codingapple1.github.io/shop/shoes" + (i + 1) + ".jpg"
