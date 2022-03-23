@@ -1,14 +1,14 @@
 import { Navbar, Container, Nav, NavDropdown, Button } from "react-bootstrap";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext ,lazy, Suspense } from "react";
 import {  Link, Route, Switch, useHistory, useParams } from "react-router-dom";
 
 import axios from "axios";
 import "./App.css";
-
-
 import Data from "./data";
-import Detail from "./Detail";
-import Cart from './Cart'
+
+let Detail = lazy(()=>{ return import('./Detail.js')  }); // import Detail from "./Detail";
+let Cart = lazy(()=>{ return import('./Cart.js')  }); // import Cart from './Cart'
+
 
 let 재고context = React.createContext(); // 원하는 값(재고)을 범위(문맥) 형성을 시켜 사용하게 하기? 
 
@@ -24,18 +24,24 @@ function App() {
           <Route exact path="/">
             <Post></Post>  {/* 포스터에 대한 컴포넌트 (App.js 64) */}
             <재고context.Provider value={재고}>  {/* 재고라는 값을 props 없이 감싸고 있는 컴포넌트가 사용 가능 (App.js 131)*/}
+              <Suspense fallback={<div>로딩중이에요</div>}>
               <Shoes shoes={shoes} shoes변경={shoes변경}></Shoes>  {/*App->Shoes->Test*/}
+              </Suspense>
             </재고context.Provider>
           </Route>
 
           {/* 상세페이지 */}
           <Route path="/detail/:id">
+            <Suspense fallback={<div>로딩중이에요</div>}>
             <Detail shoes={shoes} 재고={재고} 재고변경={재고변경}></Detail>
+            </Suspense>
           </Route>
 
           {/* 장바구니 페이지 */}
           <Route path="/cart">
+            <Suspense fallback={<div>로딩중이에요</div>}>
             <Cart></Cart>  {/* 장바구니(Cart)에 대한 컴포넌트 (Cart.js에서 import 해옴)*/}
+            </Suspense>
           </Route>
         </Switch>
     </div>
@@ -45,7 +51,7 @@ function Navigation() {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">Shoe Shop</Navbar.Brand>
+        <Navbar.Brand  as={Link} to="/">Shoe Shop{" "}</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
