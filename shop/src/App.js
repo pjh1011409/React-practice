@@ -4,7 +4,7 @@ import {  Link, Route, Switch, useHistory, useParams } from "react-router-dom";
 
 import axios from "axios";
 import "./App.css";
-import Data from "./data";
+import Data from "./data"; //상품에 대한 데이터
 
 let Detail = lazy(()=>{ return import('./Detail.js')  }); // import Detail from "./Detail";
 let Cart = lazy(()=>{ return import('./Cart.js')  }); // import Cart from './Cart'
