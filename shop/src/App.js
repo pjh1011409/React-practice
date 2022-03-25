@@ -23,6 +23,7 @@ function App() {
           {/* 메인페이지 */}
           <Route exact path="/">
             <Post></Post>  {/* 포스터에 대한 컴포넌트 (App.js 64) */}
+            <Recent></Recent>
             <재고context.Provider value={재고}>  {/* 재고라는 값을 props 없이 감싸고 있는 컴포넌트가 사용 가능 (App.js 131)*/}
               <Suspense fallback={<div>로딩중이에요</div>}>
               <Shoes shoes={shoes} shoes변경={shoes변경}></Shoes>  {/*App->Shoes->Test*/}
@@ -85,6 +86,13 @@ function Post() {
       </p>
     </div>
   );
+}
+function Recent(){
+  return(
+    <div className="recent">최근 본 상품
+      {/* {localStorage.getItem()} */}
+    </div>
+  )
 }
 function Shoes(props) {
   let [로딩중, 로딩중변경] = useState(false);
