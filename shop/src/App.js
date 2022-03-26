@@ -2,8 +2,8 @@ import { Navbar, Container, Nav, NavDropdown, Button } from "react-bootstrap";
 import React, { useState, useEffect, useContext ,lazy, Suspense } from "react";
 import {  Link, Route, Switch, useHistory, useParams } from "react-router-dom";
 
-import axios from "axios";
-import "./App.css";
+import axios from "axios"; //라우팅에 관한 것
+import "./App.css"; //app에 대한 css 
 import Data from "./data"; //상품에 대한 데이터
 
 let Detail = lazy(()=>{ return import('./Detail.js')  }); // import Detail from "./Detail";
