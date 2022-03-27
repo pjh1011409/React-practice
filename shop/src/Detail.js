@@ -36,17 +36,17 @@ function Detail(props){
   }, []);
 
 
-  let arr = [];
+  
   // 로컬스토리지에 상품의 정보 임시저장
   useEffect( ()=>{
+    let arr = [];
     arr = localStorage.getItem('watched');
     if(arr === null){arr = []} else {arr = JSON.parse(arr)}
     
-    arr.push(id);
+    arr.push(shoesId.title);
     arr = new Set(arr);
     arr = [...arr];
     localStorage.setItem('watched', JSON.stringify(arr) );
-  
   }, [] );
 
 
@@ -83,8 +83,8 @@ function Detail(props){
       <박스>
         <제목 색상={"red"}>Detail</제목>
       </박스>
-      <div>안녕{JSON.parse(localStorage.getItem('watched'))}</div>
-      <Recently shoesId = {shoesId} arr = {arr}></Recently>
+      <div>안녕    </div>
+      <Recently shoesId = {shoesId}></Recently>
       {notice === true && (
         <div className="my-alert">
           <p>재고가 얼마 남지 않았습니다.</p>
@@ -190,13 +190,20 @@ function mapStateToProps(state) {
 }
 function Recently(props){
 
-  
+  let [삭제, 삭제변경] = useState(false);
+  let arr = localStorage.getItem('watched');
+  arr = JSON.parse(arr);
   return(
     <div>
-      <p>최근 본 상품</p>
-     
-      
-      {/* <div>{props.arr[0]}</div> */}
+    <p>최근 본 상품</p>
+    <button onClick={()=>{삭제변경(true)}}>삭제</button>
+    {
+      삭제 === false?
+      <div>{arr}</div>
+      : localStorage.removeItem('watched')
+
+    }
+    
 
       </div>
   )
