@@ -2,9 +2,12 @@ import React, {useState, useEffect} from 'react'; // state, 컴포넌트 변화�
 import { useHistory, useParams} from 'react-router-dom'; // 18,19
 import styled from 'styled-components'; // 9-15와 같이 컴포넌트에만 부여될 수 있는 구분된 css
 import './Detail.scss'; //Detail css
-import {Nav} from 'react-bootstrap' // 부트스트랩에서 가져온 Nav 태그
+import {Nav, Form} from 'react-bootstrap' // 부트스트랩에서 가져온 Nav 태그
 import {CSSTransition} from 'react-transition-group'; // 99-102 기능
 import { connect } from "react-redux"; // 138가능
+import moment from 'moment';
+// 안써도 자동으로 한국 시간을 불러온다. 명확하게 하기 위해 import
+import 'moment/locale/ko';
 
 let 박스 = styled.div`
     padding: 20px;
@@ -148,7 +151,7 @@ function Detail(props){
               효과변경(false);
             }}
           >
-            Option 2
+            REVIEW
           </Nav.Link>
         </Nav.Item>
       </Nav>
@@ -162,16 +165,38 @@ function Detail(props){
 }
   // 탭키 눌렀을 때 출력되는 탭 내용
   function TabContent(props){
+
+    let [댓글, 댓글변경] = useState([]);
+    let [입력값, 입력값변경] = useState('');
     useEffect(()=>{     //컴포넌트 실행시, 업데이트시 효과가 true로 변경
       props.효과변경(true);
     })
    
     if(props.탭 === 0) { // 만약 탭값이 0이면 다음과 같은 코드 출력
-        return <div>0번째</div>
+        return <div></div>
      }
      else if(props.탭 === 1) { // 만약 탭값이 1이면 다음과 같은 코드 출력
 
-      return <div>1번째</div>
+      return <div>
+        <div>{
+        
+        댓글.map((a,i)=>{
+          return(
+            <div>{i+1}번 : {댓글[i]} </div>
+          )
+        })
+        
+        }
+        </div>
+        <hr/>
+         <Form.Control type="text" placeholder="댓글을 입력하세요." onChange={(e) => {입력값변경(e.target.value)}}/>
+         <button onClick={()=>{
+            let 댓글추가 = [...댓글];
+            댓글추가.unshift(입력값);
+            댓글변경(댓글추가)
+         }}> 저장
+        </button>
+      </div>
      }
   }
 

@@ -21,9 +21,6 @@
   padding-bottom: 20px;
 }
 
-.recent{
-  width: 60%;
-  height: 200px;
-  background: #cccc;
-  margin: 0 auto;
+#dropdown-basic-button{
+  margin-bottom: 100px;
 }
