@@ -1,4 +1,4 @@
-import { Navbar, Container, Nav, NavDropdown, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, DropdownButton, Dropdown } from "react-bootstrap";
 import React, { useState, useEffect, useContext ,lazy, Suspense } from "react";
 import {  Link, Route, Switch, useHistory, useParams } from "react-router-dom";
 
@@ -14,7 +14,7 @@ let 재고context = React.createContext(); // 원하는 값(재고)을 범위(�
 
 function App() {
   let [shoes, shoes변경] = useState(Data); // Data.js에서 가져온 상품(객체)이 담긴 배열을 저장한 state
-  let [재고, 재고변경] = useState([2, 3, 1]); // 상품마다의 재고량이 담긴 배열 state
+  let [재고, 재고변경] = useState([4, 3, 2,5,1,6]); // 상품마다의 재고량이 담긴 배열 state
 
   return (
     <div className="App">
@@ -23,7 +23,7 @@ function App() {
           {/* 메인페이지 */}
           <Route exact path="/">
             <Post></Post>  {/* 포스터에 대한 컴포넌트 (App.js 64) */}
-            <Recent></Recent>
+            <Drop 재고= {재고} 재고변경 = {재고변경} shoes = {shoes} shoes변경 = {shoes변경}></Drop>
             <재고context.Provider value={재고}>  {/* 재고라는 값을 props 없이 감싸고 있는 컴포넌트가 사용 가능 (App.js 131)*/}
               <Suspense fallback={<div>로딩중이에요</div>}>
               <Shoes shoes={shoes} shoes변경={shoes변경}></Shoes>  {/*App->Shoes->Test*/}
@@ -87,17 +87,24 @@ function Post() {
     </div>
   );
 }
-function Recent(){
-  return(
-    <div className="recent">최근 본 상품
-      {/* {localStorage.getItem()} */}
+function Drop(props) {
+  return (
+    <div>
+      <DropdownButton id="dropdown-basic-button" title="About Item">
+        <Dropdown.Item href="#/action-3">차례로 정렬</Dropdown.Item>
+        <Dropdown.Item href="#/action-1" onClick={()=>{
+           
+        }}>재고 많은 순</Dropdown.Item>
+        <Dropdown.Item href="#/action-2">재고 적은 순</Dropdown.Item>
+      </DropdownButton>
     </div>
-  )
+  );
 }
 function Shoes(props) {
   let [로딩중, 로딩중변경] = useState(false);
   let [로딩성공, 로딩성공변경] = useState(false);
   let [로딩실패, 로딩실패변경] = useState(false);
+  let [더보기, 더보기변경] = useState(true);
   let history = useHistory();
 
   return (
@@ -126,9 +133,13 @@ function Shoes(props) {
       {로딩중 === true ? <div>로딩중입니다.</div> : null} 
       {로딩성공 === true ? <div>로딩성공입니다.</div> : null}
       {로딩실패 === true ? <div>로딩실패입니다.</div> : null}
-      <button
+      
+      {
+        더보기 === true && props.shoes.length === 3?
+        <button
         className="btn btn-primary"
         onClick={() => {
+          더보기변경(false);
           로딩중변경(true); // 클릭한다면 로딩중이 true로 로딩중입니다. 출력
           axios
             .get("https://codingapple1.github.io/shop/data2.json") // axios로 서버에서 데이터 받아옴
@@ -145,13 +156,23 @@ function Shoes(props) {
       >
         더보기
       </button>
+      : <button className="btn btn-primary" onClick={() => {
+          let arr = [...props.shoes];
+          arr = arr.splice(3,5);
+          props.shoes변경(arr);
+          더보기변경(true);
+      }}>더보기 닫기</button>
+
+      
+      }
+      
     </div>
   );
 }
 function Test(props) { // 메인페이지(App)에 상품마다 재고량 출력
   let 재고 = useContext(재고context); //props 없이 사용 가능한 재고 값을 받아온 것.
 
-  return <p>{재고[props.i]}</p>; // props는 상위에서 i 값 가져오려고 사용한 것
+  return <p>재고:{재고[props.i]}</p>; // props는 상위에서 i 값 가져오려고 사용한 것
 }
 
 export default App;
